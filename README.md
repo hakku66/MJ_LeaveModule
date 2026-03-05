@@ -97,6 +97,8 @@ Employees can view only their own data:
 - Device Management (ZKTeco F22)
   - `src/Device/DeviceService.php`: sync employees, pull punches, heartbeat checks, and remote enrollment trigger
   - `src/Device/DeviceConnectionSettings.php`: HTTP/IP/serial + heartbeat + real-time sync settings
+  - `src/Device/HttpF22DeviceClient.php`: real HTTP client implementation for F22 endpoints (sync/punch/heartbeat/enrollment)
+  - `src/Device/DeviceLogSyncService.php`: pulls raw logs from device and ingests through attendance dedupe policy
 - Attendance Management
   - `src/Attendance/Timetable.php`: check-in/check-out windows, grace minutes, mandatory clock and day-change time
   - `src/Attendance/AttendanceCalculator.php`: late/early/absent evaluation logic
@@ -131,3 +133,9 @@ Employees can view only their own data:
 ```bash
 php tests/run.php
 ```
+
+
+## Real F22 integration implementation
+- Use `HttpF22DeviceClient` with `CurlHttpTransport` and `DeviceConnectionSettings` to connect to live devices over HTTP.
+- Current endpoint paths are configurable in code assumptions (`/api/employees/sync`, `/api/punch-logs`, `/api/heartbeat`, `/api/enrollment/remote`) and can be adapted to your deployed F22 gateway/API shape.
+

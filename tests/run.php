@@ -10,8 +10,12 @@ use MJ\LeaveModule\Attendance\AttendanceService;
 use MJ\LeaveModule\Attendance\Shift\ShiftDefinition;
 use MJ\LeaveModule\Attendance\Shift\ShiftScheduler;
 use MJ\LeaveModule\Attendance\Timetable;
+use MJ\LeaveModule\Device\DeviceLogSyncService;
 use MJ\LeaveModule\Device\DeviceService;
+use MJ\LeaveModule\Device\DeviceConnectionSettings;
+use MJ\LeaveModule\Device\HttpF22DeviceClient;
 use MJ\LeaveModule\Device\InMemoryF22DeviceClient;
+use MJ\LeaveModule\Device\InMemoryHttpTransport;
 use MJ\LeaveModule\Employee\EmployeeDirectory;
 use MJ\LeaveModule\Employee\EmployeeProfile;
 use MJ\LeaveModule\Leave\LeaveApplicationService;
@@ -114,6 +118,32 @@ assertTrue($deviceService->checkHeartbeat('F22-ENG-001'), 'Heartbeat should be h
 assertTrue($deviceService->startRemoteEnrollment('F22-ENG-001', 1, 'FINGERPRINT'), 'Remote enrollment should be triggered.');
 assertTrue($deviceService->canUseDevice($directory->find(1), 'F22-ENG-001', $areas), 'Area mapping should allow device usage.');
 assertTrue(count($deviceService->fetchDevicePunches('F22-ENG-001')) === 1, 'Device logs should be fetched.');
+
+assertTrue($deviceClient->enrollmentCalls('F22-ENG-001')[1] === 'FINGERPRINT', 'Enrollment mode should be captured.');
+
+$httpTransport = new InMemoryHttpTransport(
+    [
+        'http://10.10.10.20/api/heartbeat?serial=F22-REAL-01' => ['status' => 'ok'],
+        'http://10.10.10.20/api/punch-logs?serial=F22-REAL-01' => [
+            'logs' => [
+                ['employee_id' => 1, 'team' => 'Engineering', 'punch_time' => '2026-04-02 09:00:00', 'worked_hours' => 8.0, 'present' => true],
+                ['employee_id' => 1, 'team' => 'Engineering', 'punch_time' => '2026-04-02 09:00:20', 'worked_hours' => 0.0, 'present' => true],
+            ],
+        ],
+    ],
+    [
+        'http://10.10.10.20/api/employees/sync' => ['ok' => true],
+        'http://10.10.10.20/api/enrollment/remote' => ['ok' => true],
+    ]
+);
+$httpClient = new HttpF22DeviceClient($httpTransport, [new DeviceConnectionSettings('10.10.10.20', 'F22-REAL-01', 10, 'REAL_TIME')]);
+$httpDeviceService = new DeviceService($httpClient);
+$httpDeviceService->syncEmployeesToDevice($directory, 'F22-REAL-01');
+assertTrue($httpDeviceService->checkHeartbeat('F22-REAL-01'), 'HTTP F22 client heartbeat should be true.');
+assertTrue($httpDeviceService->startRemoteEnrollment('F22-REAL-01', 1, 'FACE'), 'HTTP F22 client should trigger enrollment.');
+$logSync = new DeviceLogSyncService($httpDeviceService, new AttendanceService(new AttendancePolicy(1, true, true)));
+$ingested = $logSync->pullAndIngest('F22-REAL-01');
+assertTrue(count($ingested) === 1, 'DeviceLogSyncService should ingest and dedupe real-device logs.');
 
 $payroll = new PayrollService(new PayrollCalculator(), new PayrollExceptionPolicy());
 $payout = $payroll->calculatePayout(
