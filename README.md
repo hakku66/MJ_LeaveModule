@@ -89,6 +89,20 @@ Employees can view only their own data:
 - Holiday compensation:
   - 1.5x regular daily salary for work on observed holidays
 
+## Newly implemented operational modules
+- `src/Device/DeviceService.php` + `InMemoryF22DeviceClient.php`
+  - employee sync to F22-like devices
+  - punch log pull simulation for integration testing
+- `src/Leave/LeaveApplicationService.php`
+  - employee leave apply workflow with policy enforcement
+  - manager/admin actions: approve/reject
+- `src/Attendance/AttendanceService.php`
+  - ingestion pipeline with duplicate-punch filtering
+- `src/Payroll/PayrollService.php`
+  - payout computation orchestration using payroll rules
+- `src/Employee/EmployeeDirectory.php`
+  - employee profile lookup used by leave/device modules
+
 ## Implemented code modules
 - `src/Attendance/AttendancePolicy.php`
 - `src/Leave/LeaveType.php`
