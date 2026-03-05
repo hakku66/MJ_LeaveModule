@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../src/Shared/DateRange.php';
+require_once __DIR__ . '/../src/Personnel/EmploymentType.php';
+require_once __DIR__ . '/../src/Personnel/Department.php';
+require_once __DIR__ . '/../src/Personnel/Position.php';
+require_once __DIR__ . '/../src/Personnel/Area.php';
+require_once __DIR__ . '/../src/Personnel/DepartmentService.php';
+require_once __DIR__ . '/../src/Employee/EmployeeProfile.php';
+require_once __DIR__ . '/../src/Employee/EmployeeDirectory.php';
+require_once __DIR__ . '/../src/Attendance/AttendancePolicy.php';
+require_once __DIR__ . '/../src/Attendance/AttendanceService.php';
+require_once __DIR__ . '/../src/Attendance/Timetable.php';
+require_once __DIR__ . '/../src/Attendance/AttendanceCalculator.php';
+require_once __DIR__ . '/../src/Attendance/Shift/ShiftDefinition.php';
+require_once __DIR__ . '/../src/Attendance/Shift/ShiftScheduler.php';
+require_once __DIR__ . '/../src/Leave/LeaveType.php';
+require_once __DIR__ . '/../src/Leave/LeavePolicyService.php';
+require_once __DIR__ . '/../src/Leave/LeaveRequest.php';
+require_once __DIR__ . '/../src/Leave/LeaveApplicationService.php';
+require_once __DIR__ . '/../src/Leave/LeaveApprovalService.php';
+require_once __DIR__ . '/../src/Leave/Workflow/ApprovalNode.php';
+require_once __DIR__ . '/../src/Leave/Workflow/ApprovalWorkflow.php';
+require_once __DIR__ . '/../src/Payroll/PayrollCalculator.php';
+require_once __DIR__ . '/../src/Payroll/PayrollService.php';
+require_once __DIR__ . '/../src/Payroll/PayrollAdjustment.php';
+require_once __DIR__ . '/../src/Payroll/LoanRefund.php';
+require_once __DIR__ . '/../src/Payroll/PayrollExceptionPolicy.php';
+require_once __DIR__ . '/../src/Device/DeviceConnectionSettings.php';
+require_once __DIR__ . '/../src/Device/F22DeviceClientInterface.php';
+require_once __DIR__ . '/../src/Device/HttpTransportInterface.php';
+require_once __DIR__ . '/../src/Device/CurlHttpTransport.php';
+require_once __DIR__ . '/../src/Device/InMemoryHttpTransport.php';
+require_once __DIR__ . '/../src/Device/HttpF22DeviceClient.php';
+require_once __DIR__ . '/../src/Device/InMemoryF22DeviceClient.php';
+require_once __DIR__ . '/../src/Device/DeviceService.php';
+require_once __DIR__ . '/../src/Device/DeviceLogSyncService.php';
+require_once __DIR__ . '/../src/Reporting/ViewerRole.php';
+require_once __DIR__ . '/../src/Reporting/Granularity.php';
+require_once __DIR__ . '/../src/Reporting/AttendanceRecord.php';
+require_once __DIR__ . '/../src/Reporting/LeaveRecord.php';
+require_once __DIR__ . '/../src/Reporting/ReportFilter.php';
+require_once __DIR__ . '/../src/Reporting/ReportService.php';

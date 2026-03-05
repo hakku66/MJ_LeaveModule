@@ -1,0 +1,16 @@
+{
+  "name": "mj/leave-module",
+  "description": "Core attendance, leave, and payroll module for ZKTeco F22-based workflows",
+  "type": "project",
+  "require": {
+    "php": ">=8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "MJ\\LeaveModule\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "php tests/run.php"
+  }
+}
