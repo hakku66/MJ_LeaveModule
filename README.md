@@ -1,14 +1,32 @@
 # MJ Leave Module
 
-A PHP/MySQL (or PostgreSQL) based attendance, leave, and payroll module designed to integrate with **ZKTeco F22** biometric devices.
+A user-friendly PHP attendance, leave, and payroll module designed to integrate with **ZKTeco F22** biometric devices.
 
-## Scope
+## What this system does
+- Tracks attendance from ZKTeco F22 devices.
+- Applies leave and probation rules automatically.
+- Calculates payroll outputs such as LOP and holiday pay.
+- Provides role-based views for **Admin**, **Manager**, and **Employee**.
 
-This project covers:
-- Attendance management with ZKTeco F22 device sync
-- Leave management with accrual + probation rules
-- Payroll processing for a 26th–25th salary cycle
-- Monthly reporting for attendance and salary
+## Role-based views (implemented)
+
+### Admin
+Admins can view all combinations across the organization:
+- Attendance and leave data for any employee
+- Team-level summaries across all teams
+- Daily, weekly, and monthly breakdowns
+- User-level and team-level totals in the same report payload
+
+### Manager
+Managers can view all combinations within their own team scope:
+- Attendance and leave for all team members
+- Daily, weekly, and monthly views
+- Team totals + per-user totals for their team
+
+### Employee
+Employees can view only their own data:
+- Personal attendance and leave history
+- Daily, weekly, and monthly summaries
 
 ## Functional Coverage
 
@@ -43,53 +61,25 @@ This project covers:
 - Holiday compensation:
   - 1.5x regular daily salary for work on observed holidays
 
+## Implemented code modules
+- `src/Attendance/AttendancePolicy.php`
+- `src/Leave/LeaveType.php`
+- `src/Leave/LeavePolicyService.php`
+- `src/Payroll/PayrollCalculator.php`
+- `src/Reporting/ReportService.php`
+  - Role-based access scopes (Admin/Manager/Employee)
+  - Day/week/month report modes
+  - Attendance + leave aggregations by user and by team
+
 ## Technical Baseline
-- Language: PHP
+- Language: PHP (>= 8.1)
 - Database: MySQL 8.0 or PostgreSQL
 - Minimum server hardware:
   - CPU: 2.0 GHz
   - RAM: 8 GB
   - Disk: 100 GB
 
-## Suggested Project Modules
-- `src/Device/` – F22 communication + sync jobs
-- `src/Attendance/` – punch normalization + policy engine
-- `src/Leave/` – accrual, eligibility, and workflow
-- `src/Payroll/` – salary cycle processor and deductions
-- `src/Reports/` – monthly attendance/payroll outputs
-
-## Implementation Sequence
-1. Configure PHP runtime + DB connection
-2. Apply database schema (`db/schema.sql`)
-3. Define departments and positions
-4. Register/link F22 devices (IP + serial)
-5. Configure attendance/leave/payroll policies
-6. Onboard employees and sync biometrics
-7. Schedule attendance pull + payroll jobs
-8. Generate monthly reports
-
-## Notes for Production
-- Secure device communication on trusted network segments
-- Track every synchronization and policy change in audit logs
-- Add retry/backoff + idempotency for log ingestion jobs
-- Ensure timezone normalization before attendance calculations
-
-## Initial Implementation (Started)
-
-The first implementation slice is now available under `src/`:
-- `src/Attendance/AttendancePolicy.php`
-  - duplicate-punch filtering
-  - mandatory in/out policy flags
-- `src/Leave/LeavePolicyService.php`
-  - probation validation (LWP-only for first 3 months)
-  - advance notice validation (3 days)
-  - prorated annual entitlement helper (PL/SL)
-- `src/Payroll/PayrollCalculator.php`
-  - salary cycle resolver (26th to 25th)
-  - holiday pay calculator (1.5x)
-  - LOP deduction and final payout formulas
-
-### Run checks
+## Run checks
 ```bash
 php tests/run.php
 ```
