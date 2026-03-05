@@ -18,6 +18,8 @@ A user-friendly PHP attendance, leave, and payroll module designed to integrate 
 
 > Note: This current UI is a demo/reporting shell using in-memory sample data so you can run quickly in XAMPP before DB wiring.
 
+> DB schema note: `db/schema.sql` is written for MariaDB/MySQL (XAMPP) using `AUTO_INCREMENT` and InnoDB foreign keys.
+
 
 ## Branding
 The demo UI in `public/index.php` follows the MJ brand palette:
