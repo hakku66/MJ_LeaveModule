@@ -18,6 +18,16 @@ A user-friendly PHP attendance, leave, and payroll module designed to integrate 
 
 > Note: This current UI is a demo/reporting shell using in-memory sample data so you can run quickly in XAMPP before DB wiring.
 
+
+## Branding
+The demo UI in `public/index.php` follows the MJ brand palette:
+- MJ Teal Light `#7FCED3`
+- MJ Teal Core `#41969F`
+- MJ Teal Deep `#0E4A50`
+- MJ Mist White `#E6F5F4`
+- MJ Pure White `#FEFEFE`
+- MJ Graphite `#404142`
+
 ## What this system does
 - Tracks attendance from ZKTeco F22 devices.
 - Applies leave and probation rules automatically.
