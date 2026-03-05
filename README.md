@@ -73,3 +73,23 @@ This project covers:
 - Track every synchronization and policy change in audit logs
 - Add retry/backoff + idempotency for log ingestion jobs
 - Ensure timezone normalization before attendance calculations
+
+## Initial Implementation (Started)
+
+The first implementation slice is now available under `src/`:
+- `src/Attendance/AttendancePolicy.php`
+  - duplicate-punch filtering
+  - mandatory in/out policy flags
+- `src/Leave/LeavePolicyService.php`
+  - probation validation (LWP-only for first 3 months)
+  - advance notice validation (3 days)
+  - prorated annual entitlement helper (PL/SL)
+- `src/Payroll/PayrollCalculator.php`
+  - salary cycle resolver (26th to 25th)
+  - holiday pay calculator (1.5x)
+  - LOP deduction and final payout formulas
+
+### Run checks
+```bash
+php tests/run.php
+```
