@@ -29,7 +29,7 @@ final class LeaveApplicationService
     ): LeaveRequest {
         $employee = $this->directory->find($employeeId);
 
-        if (!$this->policy->canRequestLeaveType($employee->hireDate, $startDate, $type)) {
+        if (!$this->policy->canRequestLeaveType($employee->hireDate, $startDate, $type) || ($employee->isOnProbation($startDate) && $type !== LeaveType::WITHOUT_PAY)) {
             throw new RuntimeException('Leave type is not allowed for employee probation status.');
         }
 

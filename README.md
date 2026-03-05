@@ -90,18 +90,22 @@ Employees can view only their own data:
   - 1.5x regular daily salary for work on observed holidays
 
 ## Newly implemented operational modules
-- `src/Device/DeviceService.php` + `InMemoryF22DeviceClient.php`
-  - employee sync to F22-like devices
-  - punch log pull simulation for integration testing
-- `src/Leave/LeaveApplicationService.php`
-  - employee leave apply workflow with policy enforcement
-  - manager/admin actions: approve/reject
-- `src/Attendance/AttendanceService.php`
-  - ingestion pipeline with duplicate-punch filtering
-- `src/Payroll/PayrollService.php`
-  - payout computation orchestration using payroll rules
-- `src/Employee/EmployeeDirectory.php`
-  - employee profile lookup used by leave/device modules
+- Personnel Management
+  - `src/Personnel/DepartmentService.php`: multi-level department tree with manager assignment and code/name validation
+  - `src/Personnel/EmploymentType.php`: Official / Temporary / Probation classifications
+  - `src/Personnel/Area.php`: area-to-device mapping for device access control
+- Device Management (ZKTeco F22)
+  - `src/Device/DeviceService.php`: sync employees, pull punches, heartbeat checks, and remote enrollment trigger
+  - `src/Device/DeviceConnectionSettings.php`: HTTP/IP/serial + heartbeat + real-time sync settings
+- Attendance Management
+  - `src/Attendance/Timetable.php`: check-in/check-out windows, grace minutes, mandatory clock and day-change time
+  - `src/Attendance/AttendanceCalculator.php`: late/early/absent evaluation logic
+  - `src/Attendance/Shift/ShiftScheduler.php`: recurring + temporary shift assignment
+- Leave and Approval
+  - `src/Leave/LeaveApplicationService.php`: leave apply with probation and deadline enforcement
+  - `src/Leave/LeaveApprovalService.php`: node-based multi-level approval + auto-LOP check
+- Payroll
+  - `src/Payroll/PayrollService.php`: cycle payout with LOP, holiday pay, exception deductions, loan refunds, and manual adjustments
 
 ## Implemented code modules
 - `src/Attendance/AttendancePolicy.php`

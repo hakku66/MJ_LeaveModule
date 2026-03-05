@@ -15,4 +15,8 @@ interface F22DeviceClientInterface
 
     /** @return AttendanceRecord[] */
     public function pullPunchLogs(string $deviceSerial): array;
+
+    public function heartbeat(string $deviceSerial): bool;
+
+    public function triggerRemoteEnrollment(string $deviceSerial, int $employeeId, string $mode): bool;
 }

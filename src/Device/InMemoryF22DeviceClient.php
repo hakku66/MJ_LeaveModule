@@ -11,6 +11,12 @@ final class InMemoryF22DeviceClient implements F22DeviceClientInterface
     /** @var array<string, array<int, string>> */
     private array $syncedEmployees = [];
 
+    /** @var array<string, bool> */
+    private array $heartbeatState = [];
+
+    /** @var array<string, array<int, string>> */
+    private array $enrollmentCalls = [];
+
     /** @param array<string, AttendanceRecord[]> $logsByDevice */
     public function __construct(private array $logsByDevice = [])
     {
@@ -26,9 +32,26 @@ final class InMemoryF22DeviceClient implements F22DeviceClientInterface
         return $this->logsByDevice[$deviceSerial] ?? [];
     }
 
+    public function heartbeat(string $deviceSerial): bool
+    {
+        return $this->heartbeatState[$deviceSerial] ?? true;
+    }
+
+    public function triggerRemoteEnrollment(string $deviceSerial, int $employeeId, string $mode): bool
+    {
+        $this->enrollmentCalls[$deviceSerial][$employeeId] = $mode;
+        return true;
+    }
+
     /** @return array<int, string> */
     public function syncedEmployees(string $deviceSerial): array
     {
         return $this->syncedEmployees[$deviceSerial] ?? [];
+    }
+
+    /** @return array<int, string> */
+    public function enrollmentCalls(string $deviceSerial): array
+    {
+        return $this->enrollmentCalls[$deviceSerial] ?? [];
     }
 }
