@@ -121,6 +121,19 @@ Employees can view only their own data:
 - `public/index.php`
   - XAMPP-ready UI entrypoint for report viewing
 
+## Module API (implemented now)
+A single integrated API entrypoint is available at `public/api.php` for all major modules.
+
+Example calls in browser (XAMPP):
+- `http://localhost/MJ_LeaveModule/public/api.php?action=create_department&code=100&name=Level%201`
+- `http://localhost/MJ_LeaveModule/public/api.php?action=apply_leave&employee_id=1&leave_type=PL&start=2026-05-10&end=2026-05-11&requested_at=2026-05-05`
+- `http://localhost/MJ_LeaveModule/public/api.php?action=ingest_punch&employee_id=1&team=Engineering&punch_time=2026-05-01%2009:00:00&hours=8`
+- `http://localhost/MJ_LeaveModule/public/api.php?action=attendance_day&checkin=2026-05-01%2009:20:00&checkout=2026-05-01%2017:20:00`
+- `http://localhost/MJ_LeaveModule/public/api.php?action=payroll&gross_salary=30000&lop_days=1&holiday_days=1`
+- `http://localhost/MJ_LeaveModule/public/api.php?action=sync_device&serial=F22-REAL-01`
+- `http://localhost/MJ_LeaveModule/public/api.php?action=can_use_device&employee_id=1&serial=F22-REAL-01`
+- `http://localhost/MJ_LeaveModule/public/api.php?action=report&role=ADMIN&granularity=MONTHLY`
+
 ## Technical Baseline
 - Language: PHP (>= 8.1)
 - Database: MySQL 8.0 or PostgreSQL

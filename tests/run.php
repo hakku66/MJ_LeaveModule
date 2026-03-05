@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../public/bootstrap.php';
+require_once __DIR__ . '/../src/Application/LeaveModuleFacade.php';
 
+use MJ\LeaveModule\Application\LeaveModuleFacade;
 use MJ\LeaveModule\Attendance\AttendanceCalculator;
 use MJ\LeaveModule\Attendance\AttendancePolicy;
 use MJ\LeaveModule\Attendance\AttendanceService;
@@ -172,5 +174,18 @@ $leaves = [
 ];
 $adminReport = $reportService->generate($attendance, $leaves, new ReportFilter(ViewerRole::ADMIN, null, null, [], Granularity::MONTHLY));
 assertTrue(isset($adminReport['attendance']['by_period_and_team']['2026-04']['Engineering']), 'Admin report should include engineering team.');
+
+
+$facade = new LeaveModuleFacade();
+$facade->createDepartment('100', 'Level 1', null, 1, 1);
+$leaveApplied = $facade->applyLeave(1, 'PL', '2026-05-10', '2026-05-11', '2026-05-05');
+assertTrue(($leaveApplied['status'] ?? '') === 'PENDING', 'Facade should apply leave through integrated module.');
+assertTrue($facade->ingestPunch(1, 'Engineering', '2026-05-01 09:00:00', 8.0, true) === 1, 'Facade punch ingest should accept new punch.');
+assertTrue($facade->syncDevice('F22-REAL-01'), 'Facade should sync and heartbeat-check device.');
+assertTrue($facade->canUseDevice(1, 'F22-REAL-01'), 'Facade should enforce area-based device access.');
+$payrollFromFacade = $facade->payroll(30000, 1, 1, 5, 0, false);
+assertTrue(isset($payrollFromFacade['final_payout']), 'Facade payroll call should return final payout.');
+$reportFromFacade = $facade->report('ADMIN', 'MONTHLY');
+assertTrue(isset($reportFromFacade['meta']), 'Facade report should return report payload.');
 
 echo "All tests passed\n";
